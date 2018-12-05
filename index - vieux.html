@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<title>Touka analytics</title>
+		<link rel="stylesheet" href="odometer-theme-default.css" />
+		<script src="odometer.js"></script>
+		<script type="text/javascript" src="jquery-3.1.1.min.js"> </script>
+		
+		<style>
+		.odometer{
+			font-size: 100px;
+		}
+		</style>
+	</head>
+	
+	<script type="text/javascript">
+	
+	$(document).ready( function() {
+	
+		var chanName="";
+		<!--loadChannel("UC-lHJZR3Gqxm24_Vd_AJ5Yw");pewds-->
+		loadChannel("UCKVY24k7S_JJlLJt-NAoFQQ");
+		
+		function loadChannel(name) {
+		
+			chanName = name;
+			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+name+"&key=AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
+			$.getJSON(url, function(data) {
+				$('#odometer').html(data.items[0].statistics.subscriberCount);
+			});
+		}
+		
+		setInterval( function () {
+		
+			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanName+"&key=AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
+			$.getJSON(url, function(data) {
+				$('#odometer').html(data.items[0].statistics.subscriberCount);
+			}, 5000);
+			
+		});
+	
+	});
+	
+	</script>
+	
+	
+	<body background="poom.jpg">
+		<center>
+			<div id="odometer" class="odometer"></div>
+			<font size="150">subs, t'entends</font><br>
+			<div id="odometer" class="odometer"></div>
+			<font size="150">subs, t'entends</font>
+		</center>
+	</body>
+	
+	<audio controls>
+    <source src="touka theme song.mp3" type="audio/mpeg">
+	</audio>
+
+
+</html>

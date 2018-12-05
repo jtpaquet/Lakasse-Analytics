@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>JavaScript Loops</h2>
+
+<p id="demo"></p>
+
+<script>
+var chanNames = ["LaKasse", "La Rotie du Dechet", "Roulo", "Pierre-Poom", "Lakasse2", "Pewdiepie", "T-Series"];
+var chanIds = ["UCKVY24k7S_JJlLJt-NAoFQQ", "UCqmrfCRbn0tOlxeeT1i1kgA", "UC9gfNh5MiOQhLvokywh-TdQ", "UCq2qgqXAVSWBVrP4rSrrCKg", "UCgs7BG_0c4ddW0SOav_n10w", "UC-lHJZR3Gqxm24_Vd_AJ5Yw", "UCq-Fj5jknLsUf-MWSy4_brA"];
+var text = "";
+var i;
+for (i = 0; i < chanNames.length; i++) {
+	text += chanNames[i] + "<br>";
+}
+document.getElementById("demo").innerHTML = text;
+</script>
+
+</body>
+</html>

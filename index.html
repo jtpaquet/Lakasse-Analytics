@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Touka analytics</title>
+		<link rel="stylesheet" href="odometer-theme-default.css" />
+		<script src="odometer.js"></script>
+		<script type="text/javascript" src="jquery-3.1.1.min.js"> </script>
+		
+		<style>.odometer{font-size: 100px;}</style>
+	</head>
+	
+	<script type="text/javascript">
+	
+	$(document).ready( function() {
+
+		var chanNames = ["LaKasse", "La Rotie du Dechet", "Roulo", "Pierre-Poom", "Lakasse2", "Pewdiepie", "T-Series"];
+		var chanIds = ["UCKVY24k7S_JJlLJt-NAoFQQ", "UCqmrfCRbn0tOlxeeT1i1kgA", "UC9gfNh5MiOQhLvokywh-TdQ", "UCq2qgqXAVSWBVrP4rSrrCKg", "UCgs7BG_0c4ddW0SOav_n10w", "UC-lHJZR3Gqxm24_Vd_AJ5Yw", "UCq-Fj5jknLsUf-MWSy4_brA"];
+		var odometers = ["LaKasseOdo", "LaRotieduDechetOdo", "RouloOdo", "Pierre-PoomOdo", "Lakasse2Odo", "PewdiepieOdo", "T-SeriesOdo"];
+
+		for (i = 0; i < chanNames.length; i++) {
+			loadChannel(chanIds[i], odometers[i]);
+		}
+		
+		function loadChannel(name, odo) {
+			chanName = name;
+			chanOdo = odo;
+			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+name+"&key=AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
+			$.getJSON(url, function(data) {
+				$('#'+odo).html(data.items[0].statistics.subscriberCount);
+			});
+		}
+		
+		setInterval( function () {
+		
+			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanName+"&key=AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
+			$.getJSON(url, function(data) {
+				$('#'+chanOdo).html(data.items[0].statistics.subscriberCount);
+
+			}, 15000);
+			
+		});
+	
+	});
+
+	</script>
+	
+	
+
+	<!-- BODY -->
+	<body background="">
+		<center>
+			<p>LaKasse</p><br>
+			<div id="LaKasseOdo" class="odometer"></div><br>
+			<p>La Rotie du Dechet</p><br>
+			<div id="LaRotieduDechetOdo" class="odometer"></div><br>
+			<p>Roulo</p><br>
+			<div id="RouloOdo" class="odometer"></div><br>
+			<p>Pierre-Poom</p><br>
+			<div id="Pierre-PoomOdo" class="odometer"></div><br>
+			<p>Lakasse2</p><br>
+			<div id="Lakasse2Odo" class="odometer"></div><br>
+			<p>Pewdiepie</p><br>
+			<div id="PewdiepieOdo" class="odometer"></div><br>
+			<p>T-Series >:(</p><br>
+			<div id="T-SeriesOdo" class="odometer"></div><br>
+
+			<embed name="ToukaThemeSong" src="touka theme song.mp3" loop="true" hidden="true" autostart="true">
+
+   		</center>
+	</body>
+	
+
+
+</html>
