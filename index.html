@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Touka analytics</title>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="favicon.ico" />
+		<title>&#x1F4AF;Touka analytics&#x1F4AF;</title>
 		<link rel="stylesheet" href="odometer-theme-default.css" />
 		<script src="odometer.js"></script>
 		<script type="text/javascript" src="jquery-3.1.1.min.js"> </script>
-		
 		<style>.odometer{font-size: 100px;}</style>
+		<style>
+		      @font-face { font-family: Raleway; src: url('fonts/Raleway-light.ttf'); } 
+		      h1 { font-family: Raleway;}
+		      p {font-family: Raleway;}
+		</style>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	</head>
 	
 	<script type="text/javascript">
 	
 	$(document).ready( function() {
+
+		var key = "AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
 
 		var chanNames = ["LaKasse", "La Rotie du Dechet", "Roulo", "Pierre-Poom", "Lakasse2", "Pewdiepie", "T-Series"];
 		var chanIds = ["UCKVY24k7S_JJlLJt-NAoFQQ", "UCqmrfCRbn0tOlxeeT1i1kgA", "UC9gfNh5MiOQhLvokywh-TdQ", "UCq2qgqXAVSWBVrP4rSrrCKg", "UCgs7BG_0c4ddW0SOav_n10w", "UC-lHJZR3Gqxm24_Vd_AJ5Yw", "UCq-Fj5jknLsUf-MWSy4_brA"];
@@ -20,55 +31,249 @@
 		for (i = 0; i < chanNames.length; i++) {
 			loadChannel(chanIds[i], odometers[i]);
 		}
-		
+		loadSubGap();
+
 		function loadChannel(name, odo) {
 			chanName = name;
 			chanOdo = odo;
-			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+name+"&key=AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
+			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+name+"&key="+key;
 			$.getJSON(url, function(data) {
 				$('#'+odo).html(data.items[0].statistics.subscriberCount);
 			});
 		}
 		
 		setInterval( function () {
-		
-			var url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanName+"&key=AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
-			$.getJSON(url, function(data) {
-				$('#'+chanOdo).html(data.items[0].statistics.subscriberCount);
+			for (i = 0; i < chanNames.length; i++) {
+			loadChannel(chanIds[i], odometers[i]);
+			loadSubGap();
+		};
+		}, 10000);
 
-			}, 15000);
+		function loadSubGap() {
+			pewds_url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanIds[5]+"&key="+key;
+			tseries_url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanIds[6]+"&key="+key;
+
+
+			function get_subcount(chan_url) {
+				var subcount;
+				$.ajax({
+					url:chan_url,
+					datatype:'json',
+					async:false,
+					success: function(data) {
+					subcount = data.items[0].statistics.subscriberCount;
+					}
+				});
+				return subcount
+			}
+
+			pewds_subcount = get_subcount(pewds_url);
+			tseries_subcount = get_subcount(tseries_url);
+			let subgap = pewds_subcount - tseries_subcount;
+
+			$("#SubGapOdo").html(subgap.toString());
+		}
 			
-		});
+	});
 	
+	</script>
+	
+
+	<script type="text/javascript">
+	$(document).ready( function() {
+
+
+		Date.daysBetween = function( date1, date2 ) {
+			//Get 1 day in milliseconds
+			var one_day=1000*60*60*24;
+
+			// Convert both dates to milliseconds
+			var date1_ms = date1.getTime();
+			var date2_ms = date2.getTime();
+
+			// Calculate the difference in milliseconds
+			var difference_ms = date2_ms - date1_ms;
+			    
+			// Convert back to days and return
+			return difference_ms/one_day; 
+		}
+
+
+		var departLacasse  = new Date(2018, 7, 26); //Month is 0-11 in JavaScript
+		var departRoulo  = new Date(2018, 7, 15); //Month is 0-11 in JavaScript
+		var retourLacasse = new Date(2019, 5, 17);
+		var retourRoulo = new Date(2018, 11, 19);
+
+		function updatePourcentage() {
+
+			var currentTime = new Date();
+			var totalLacasse = Date.daysBetween(retourLacasse, departLacasse);
+			var faitLacasse = Date.daysBetween(currentTime, departLacasse);
+			var pourcentageLacasse = faitLacasse/totalLacasse * 100;
+			var pourcentageRoulo = 100;
+
+			if (pourcentageLacasse < 0) {
+			  pourcentageLacasse = 100;
+			}
+
+  			var LacasseBar = document.getElementById("LacasseBar");
+		    LacasseBar.style.width = pourcentageLacasse.toString() + '%';
+		    LacasseBar.innerHTML = pourcentageLacasse.toFixed(7) + '%';
+
+  			var RouloBar = document.getElementById("RouloBar");
+		    RouloBar.style.width = pourcentageRoulo.toString() + '%';
+		    RouloBar.innerHTML = pourcentageRoulo.toFixed(7) + '%';
+		}
+
+		setInterval(function() {updatePourcentage(); }, 10);
+
+		updatePourcentage();
 	});
 
 	</script>
 	
+	<script language="javascript">
+    function changeImage() {
+		<!-- local: var path = location.href.slice(0,-10); -->
+		<!-- webhost: var path = location.href; -->
+		var path = location.href.slice(0,-10);
+		console.log(path+document.getElementById("imgClickAndChange").src);
+        if (document.getElementById("imgClickAndChange").src == path+"roblox_head.png") 
+        {
+			console.log("OOF");
+            document.getElementById("imgClickAndChange").src = "lakasse_head.png";
+			document.getElementById("imgClickAndChange").style = "height: 500px; width: 1000px";
+			document.getElementById("oof_sound").play();
+        }
+		else
+		{
+		console.log("arrete stp")
+		}
+    }
+	</script>
+	
+	<script language="javascript">
+	function deg2rad(angle)
+	{
+	  var pi = Math.PI;
+	  return angle * (pi/180);
+	}
+
+	function distance(p1,p2) //p_i = (latitude, longitude) = (phi, lambda)
+	{
+		var r = 6371; // [km]
+		var lat1 = deg2rad(p1[0]);
+		var lat2 = deg2rad(p2[0]);
+		var long1 = deg2rad(p1[1]);
+		var long2 = deg2rad(p2[1]);
+		
+		//var theta = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(long2-long1));
+		var ds2= Math.pow(r, 2)*(Math.pow((lat1-lat2), 2) + Math.pow(Math.cos(lat1)*(long1-long2),2)); // [km]
+		return Math.sqrt(ds2);
+		//console.log(theta);
+		//return r*theta; // [km]
+	}
+	
+	var adresse_barbies = ["330 Boul. Bouvier, Québec, Qc", "580 Boul. St-Martin, Laval, Qc", "1175 Chemin du Tremblay, Longueuil, Qc", "7850 Boul. Taschereau, Brossard, Qc", "260 Montée Masson, Mascouche"]
+	var coord_barbies = [[46.841485, -71.271057], [45.575422, -73.713267], [45.536869, -73.465347], [45.452896, -73.467350], [45.726860, -73.618713]];
+	navigator.geolocation.getCurrentPosition(
+	function distanceBarbies(position) {
+			var latitude = position.coords.latitude;
+			var longitude = position.coords.longitude;
+			var pos = [latitude, longitude];
+			console.log(pos);
+			var dists = [];
+			for (i = 0; i < coord_barbies.length; i++) {
+				dists.push(distance(pos, coord_barbies[i]));
+			}
+			var idx = dists.indexOf(Math.max.apply(Math, dists))-1;
+			document.getElementById('Barbies_distance').innerHTML = "Le Barbies Resto Bar & Grill le plus proche est à " + parseFloat(dists[idx]).toFixed(2) + " km.";
+			document.getElementById('Barbies_adresse').innerHTML = adresse_barbies[idx];
+			
+			return [dists[idx], adresse_barbies[idx]]; // [distance, adresse] du barbies le plus proche
+		}
+	);
+	</script>
 	
 
 	<!-- BODY -->
 	<body background="">
 		<center>
-			<p>LaKasse</p><br>
+			<h1>Touka Analytics</h1><br><br>
+			<h1>
+			<a href="analytics/analytics.html">Wow!!! Ici les données officielles de Touka</a>
+			</h1><br>
+			<h1>&#x1F525;&#x1F525;&#x1F525;LaKasse&#x1F525;&#x1F525;&#x1F525;</h1><br>
 			<div id="LaKasseOdo" class="odometer"></div><br>
-			<p>La Rotie du Dechet</p><br>
+			<h1>&#x1F171;&#x1F171;&#x1F171;La Rotie du Dechet&#x1F171;&#x1F171;&#x1F171;</h1><br>
 			<div id="LaRotieduDechetOdo" class="odometer"></div><br>
-			<p>Roulo</p><br>
+			<h1>&#x1F648;&#x1F648;&#x1F648;Roulo&#x1F648;&#x1F648;&#x1F648;</h1><br>
 			<div id="RouloOdo" class="odometer"></div><br>
-			<p>Pierre-Poom</p><br>
+			<h1>&#x1F602;&#x1F602;&#x1F602;Pierre-Poom&#x1F602;&#x1F602;&#x1F602;</h1><br>
 			<div id="Pierre-PoomOdo" class="odometer"></div><br>
-			<p>Lakasse2</p><br>
-			<div id="Lakasse2Odo" class="odometer"></div><br>
-			<p>Pewdiepie</p><br>
-			<div id="PewdiepieOdo" class="odometer"></div><br>
-			<p>T-Series >:(</p><br>
-			<div id="T-SeriesOdo" class="odometer"></div><br>
+			<h1>&#x1F44C;&#x1F44C;&#x1F44C;Lakasse2&#x1F44C;&#x1F44C;&#x1F44C;</h1><br>
+			<div id="Lakasse2Odo" class="odometer"></div><br><br>
+			<!--
+				<h1>&#x1F44D;&#x1F44D;&#x1F44D;Pewdiepie&#x1F44D;&#x1F44D;&#x1F44D;</h1><br>
+				<div id="PewdiepieOdo" class="odometer"></div><br>
+				<h1>&#x1F621;&#x1F621;&#x1F621;T-Series&#x1F621;&#x1F621;&#x1F621;</h1><br>
+				<div id="T-SeriesOdo" class="odometer"></div><br>
+				<h1>&#x1F62C;&#x1F62C;&#x1F62C;Sub Gap&#x1F62C;&#x1F62C;&#x1F62C;</h1><br>
+				<div id="SubGapOdo" class="odometer"></div><br>
+			-->
+			
+			<!--
+			<div class="container">
+				<h1>Jours avant l'arrivée de Lacasse</h1>
+					<div class="progress">
+						<div  id="LacasseBar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style= "width: 0%">
+					</div>
+				</div>
+			</div>
 
-			<embed name="ToukaThemeSong" src="touka theme song.mp3" loop="true" hidden="true" autostart="true">
+			<div class="container">
+			<h1>Jours avant l'arrivée de Roulo</h1>
+				<div class="progress">
+					<div id="RouloBar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style= "width: 0%">
+					</div>
+				</div>
+			</div>
+			-->
 
+			<audio controls>
+			<source src="touka theme song.mp3" type="audio/mpeg">
+				Your browser does not support the audio element.
+			</audio><br>
+
+			<p id="EnergySwordSundayLink"><a id="EnergySwordSundayHref"></a></p><br>
+			
+			<script>
+				var date = new Date();
+				var n = date.getDay();
+				if (n == 0) {
+					console.log("C'est le énergie épée dimanche");
+					document.getElementById('EnergySwordSundayLink').innerText = "Site vrm cool !!!";
+					document.getElementById("EnergySwordSundayHref").href = "site_vrm_cool.html";
+				}
+			</script>
+
+			<audio id="oof_sound" src="minecraft-oof.mp3" ></audio>
+			
+			<script>
+			var barbies_stats = distanceBarbies(); // barbies_stats = [distance, adresse] du barbies le plus proche
+			</script>
+			
+			<div>
+				<h1>Vos statistiques Barbies</h1>
+				<h4>powered by Touka-Poom Corporation</h4><br>
+				<p id="Barbies_distance">Localisation non disponible &#x1F622;&#x1F622&#x1F622;&#x1F622;</p>
+				<p id="Barbies_adresse"></p><br>
+			</div>
+			
+			<p>
+			<img src="roblox_head.png" style="height: 500px; width: 500px" id="imgClickAndChange" onclick="changeImage()"  />
+			</p>
    		</center>
 	</body>
-	
-
 
 </html>
