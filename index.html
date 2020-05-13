@@ -24,15 +24,15 @@
 
 		var key = "AIzaSyDU7VAS5CR7Et9igBibH5GizTn7CiFyJJc";
 
-		var chanNames = ["LaKasse", "La Rotie du Dechet", "Roulo", "Pierre-Poom", "Lakasse2", "Pewdiepie", "T-Series"];
-		var chanIds = ["UCKVY24k7S_JJlLJt-NAoFQQ", "UCqmrfCRbn0tOlxeeT1i1kgA", "UC9gfNh5MiOQhLvokywh-TdQ", "UCq2qgqXAVSWBVrP4rSrrCKg", "UCgs7BG_0c4ddW0SOav_n10w", "UC-lHJZR3Gqxm24_Vd_AJ5Yw", "UCq-Fj5jknLsUf-MWSy4_brA"];
-		var odometers = ["LaKasseOdo", "LaRotieduDechetOdo", "RouloOdo", "Pierre-PoomOdo", "Lakasse2Odo", "PewdiepieOdo", "T-SeriesOdo"];
+		var chanNames = ["LaKasse", "La Rotie du Dechet", "Roulo", "Pierre-Poom", "Lakasse2"]//, "Pewdiepie", "T-Series"];
+		var chanIds = ["UCKVY24k7S_JJlLJt-NAoFQQ", "UCqmrfCRbn0tOlxeeT1i1kgA", "UC9gfNh5MiOQhLvokywh-TdQ", "UCq2qgqXAVSWBVrP4rSrrCKg", "UCgs7BG_0c4ddW0SOav_n10w"]//, "UC-lHJZR3Gqxm24_Vd_AJ5Yw", "UCq-Fj5jknLsUf-MWSy4_brA"];
+		var odometers = ["LaKasseOdo", "LaRotieduDechetOdo", "RouloOdo", "Pierre-PoomOdo", "Lakasse2Odo"]//, "PewdiepieOdo", "T-SeriesOdo"];
 
 		for (i = 0; i < chanNames.length; i++) {
 			loadChannel(chanIds[i], odometers[i]);
 		}
-		loadSubGap();
-
+		//loadSubGap();
+		
 		function loadChannel(name, odo) {
 			chanName = name;
 			chanOdo = odo;
@@ -45,10 +45,11 @@
 		setInterval( function () {
 			for (i = 0; i < chanNames.length; i++) {
 			loadChannel(chanIds[i], odometers[i]);
-			loadSubGap();
+			//loadSubGap();
 		};
-		}, 10000);
-
+		}, 100000);
+		
+		/*
 		function loadSubGap() {
 			pewds_url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanIds[5]+"&key="+key;
 			tseries_url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id="+chanIds[6]+"&key="+key;
@@ -73,16 +74,17 @@
 
 			$("#SubGapOdo").html(subgap.toString());
 		}
-			
+		*/
 	});
 	
 	</script>
 	
-
+	
 	<script type="text/javascript">
+	/*
 	$(document).ready( function() {
 
-
+		
 		Date.daysBetween = function( date1, date2 ) {
 			//Get 1 day in milliseconds
 			var one_day=1000*60*60*24;
@@ -125,10 +127,10 @@
 		    RouloBar.innerHTML = pourcentageRoulo.toFixed(7) + '%';
 		}
 
-		setInterval(function() {updatePourcentage(); }, 10);
+		// setInterval(function() {updatePourcentage(); }, 10);
 
-		updatePourcentage();
-	});
+		// updatePourcentage();
+	}); */
 
 	</script>
 	
@@ -152,47 +154,48 @@
     }
 	</script>
 	
-	<script language="javascript">
-	function deg2rad(angle)
-	{
-	  var pi = Math.PI;
-	  return angle * (pi/180);
-	}
-
-	function distance(p1,p2) //p_i = (latitude, longitude) = (phi, lambda)
-	{
-		var r = 6371; // [km]
-		var lat1 = deg2rad(p1[0]);
-		var lat2 = deg2rad(p2[0]);
-		var long1 = deg2rad(p1[1]);
-		var long2 = deg2rad(p2[1]);
-		
-		//var theta = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(long2-long1));
-		var ds2= Math.pow(r, 2)*(Math.pow((lat1-lat2), 2) + Math.pow(Math.cos(lat1)*(long1-long2),2)); // [km]
-		return Math.sqrt(ds2);
-		//console.log(theta);
-		//return r*theta; // [km]
-	}
-	
-	var adresse_barbies = ["330 Boul. Bouvier, Québec, Qc", "580 Boul. St-Martin, Laval, Qc", "1175 Chemin du Tremblay, Longueuil, Qc", "7850 Boul. Taschereau, Brossard, Qc", "260 Montée Masson, Mascouche"]
-	var coord_barbies = [[46.841485, -71.271057], [45.575422, -73.713267], [45.536869, -73.465347], [45.452896, -73.467350], [45.726860, -73.618713]];
-	navigator.geolocation.getCurrentPosition(
-	function distanceBarbies(position) {
-			var latitude = position.coords.latitude;
-			var longitude = position.coords.longitude;
-			var pos = [latitude, longitude];
-			console.log(pos);
-			var dists = [];
-			for (i = 0; i < coord_barbies.length; i++) {
-				dists.push(distance(pos, coord_barbies[i]));
-			}
-			var idx = dists.indexOf(Math.max.apply(Math, dists))-1;
-			document.getElementById('Barbies_distance').innerHTML = "Le Barbies Resto Bar & Grill le plus proche est à " + parseFloat(dists[idx]).toFixed(2) + " km.";
-			document.getElementById('Barbies_adresse').innerHTML = adresse_barbies[idx];
-			
-			return [dists[idx], adresse_barbies[idx]]; // [distance, adresse] du barbies le plus proche
+	<script>
+		function deg2rad(angle)
+		{
+		  var pi = Math.PI;
+		  return angle * (pi/180);
 		}
-	);
+
+		function distance(p1,p2) //p_i = (latitude, longitude) = (phi, lambda)
+		{
+			var r = 6371; // [km]
+			var lat1 = deg2rad(p1[0]);
+			var lat2 = deg2rad(p2[0]);
+			var long1 = deg2rad(p1[1]);
+			var long2 = deg2rad(p2[1]);
+			
+			//var theta = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(long2-long1));
+			var ds2= Math.pow(r, 2)*(Math.pow((lat1-lat2), 2) + Math.pow(Math.cos(lat1)*(long1-long2),2)); // [km]
+			return Math.sqrt(ds2);
+			//console.log(theta);
+			//return r*theta; // [km]
+		}
+		
+		var adresse_barbies = ["330 Boul. Bouvier, Québec, Qc", "580 Boul. St-Martin, Laval, Qc", "1175 Chemin du Tremblay, Longueuil, Qc", "7850 Boul. Taschereau, Brossard, Qc", "260 Montée Masson, Mascouche"]
+		var coord_barbies = [[46.841485, -71.271057], [45.575422, -73.713267], [45.536869, -73.465347], [45.452896, -73.467350], [45.726860, -73.618713]];
+		navigator.geolocation.getCurrentPosition(
+		function distanceBarbies(position) {
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				var pos = [latitude, longitude];
+				console.log(pos);
+				var dists = [];
+				for (i = 0; i < coord_barbies.length; i++) {
+					dists.push(distance(pos, coord_barbies[i]));
+				}
+				var idx = dists.indexOf(Math.max.apply(Math, dists))-1;
+				document.getElementById('Barbies_distance').innerHTML = "Le Barbies Resto Bar & Grill le plus proche est à " + parseFloat(dists[idx]).toFixed(2) + " km.";
+				document.getElementById('Barbies_adresse').innerHTML = adresse_barbies[idx];
+				
+				return [dists[idx], adresse_barbies[idx]]; // [distance, adresse] du barbies le plus proche
+			}
+		);
+		var barbies_stats = distanceBarbies(); // barbies_stats = [distance, adresse] du barbies le plus proche
 	</script>
 	
 
@@ -249,19 +252,14 @@
 			
 			<script>
 				var date = new Date();
-				var n = date.getDay();
-				if (n == 0) {
-					console.log("C'est le énergie épée dimanche");
+				if (date.getDay() == 0) {
+					console.log("Ceça est le énergie épée dimanche");
 					document.getElementById('EnergySwordSundayLink').innerText = "Site vrm cool !!!";
 					document.getElementById("EnergySwordSundayHref").href = "site_vrm_cool.html";
 				}
 			</script>
 
 			<audio id="oof_sound" src="minecraft-oof.mp3" ></audio>
-			
-			<script>
-			var barbies_stats = distanceBarbies(); // barbies_stats = [distance, adresse] du barbies le plus proche
-			</script>
 			
 			<div>
 				<h1>Vos statistiques Barbies</h1>
